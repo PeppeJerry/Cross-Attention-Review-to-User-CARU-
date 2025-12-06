@@ -31,6 +31,7 @@ This project introduces a **modular ranking-based approach** designed to overcom
 Clone the repository and install the required dependencies:
 
 ```bash
-git clone [https://github.com/PeppeJerry/Cross-Attention-Review-to-User-CARU-](https://github.com/PeppeJerry/Cross-Attention-Review-to-User-CARU-) CARU-TIL
+git clone https://github.com/PeppeJerry/Cross-Attention-Review-to-User-CARU-.git CARU_TIL
 cd CARU-TIL
 pip install -r requirements.txt
+
