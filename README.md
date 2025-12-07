@@ -46,14 +46,33 @@ The `prepare.py` script is optimized to read binary data directly. You must form
 * **Key Name:** `"tokens"`
 * **Value Format:** Base64 string of the float32 array.
 
+**Handling Missing Reviews (Null Token Strategy):**
+If a review is missing or unavailable, you must insert the Base64 representation of a **1536-dimensional vector of zeros** (float32).
+* **Visual Check:** This string will appear essentially as a long sequence of `"A"` characters.
+* **Model Logic:** When the data loader encounters this zero-vector, the model detects the absence of context and automatically utilizes a specific, learnable **"null token"** strategy to substitute the missing review information.
+> **Tip:** You can generate the null token string in Python using:
+> `base64.b64encode(np.zeros(1536, dtype=np.float32)).decode('utf-8')`
+
 **Example of expected JSON line structure:**
 ```json
 {
-  "reviewerID": "A2SUAM1J3GNN3B",
-  "asin": "0000013714",
+  "reviewerID": "A1HK2FQW6KXQB2",
+  "asin": "097293751X",
   "overall": 5.0,
-  "reviewText": "I bought this for my husband...",
-  "tokens": "NmZmQz... (Base64 encoded float32 array)"
+  "reviewText": "Perfect for new parents. We were able to keep...",
+  "tokens": "KRmRPNlvnjtvdq+8718KPJ..."
+}
+```
+**Example of a Missing Review (Null Token Case):**
+In this scenario, `reviewText` is empty (or ignored), and `tokens` contains the zero-vector.
+
+```json
+{
+  "reviewerID": "A1J1GBJREDREP",
+  "asin": "B00563XRYM",
+  "overall": 1.0,
+  "reviewText": "",
+  "tokens": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA..."
 }
 ```
 > **Why Base64?** As seen in `prepare.py`, the loader uses `np.frombuffer(base64.b64decode(...))` to strictly parse binary data. Storing 1536 floats as plain text JSON lists would drastically increase file size and parsing time.
@@ -63,6 +82,6 @@ The `prepare.py` script is optimized to read binary data directly. You must form
 Clone the repository and install the required dependencies:
 
 ```bash
-git clone https://github.com/PeppeJerry/Cross-Attention-Review-to-User-CARU-.git CARU-TIL
-cd CARU-TIL
+git clone https://github.com/PeppeJerry/Cross-Attention-Review-to-User-CARU-.git CARU_TIL
+cd CARU_TIL
 pip install -r requirements.txt
